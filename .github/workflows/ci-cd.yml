@@ -37,7 +37,7 @@ jobs:
           cache: maven                  #
 
       - name: Wait for MySQL to be Ready
-        run: sleep 20                   # give MySQL time to start
+        run: sleep 20                   #
 
       - name: Run Tests
         run: mvn test
