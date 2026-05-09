@@ -34,7 +34,7 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: maven                  # caches maven deps — faster builds
+          cache: maven                  #
 
       - name: Wait for MySQL to be Ready
         run: sleep 20                   # give MySQL time to start
