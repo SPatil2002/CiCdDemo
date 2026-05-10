@@ -14,11 +14,14 @@ jobs:
     services:
       mysql:
         image: mysql:8.0
+
         env:
           MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
           MYSQL_DATABASE: Demo
+
         ports:
           - 3306:3306
+
         options: >-
           --health-cmd="mysqladmin ping -h localhost"
           --health-interval=10s
@@ -26,6 +29,7 @@ jobs:
           --health-retries=5
 
     steps:
+
       - name: Checkout Code
         uses: actions/checkout@v4
 
@@ -34,10 +38,10 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: maven                  #
+          cache: maven
 
       - name: Wait for MySQL to be Ready
-        run: sleep 20                   #
+        run: sleep 20
 
       - name: Run Tests with Coverage
         run: mvn clean test jacoco:report
@@ -47,7 +51,14 @@ jobs:
           SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
       - name: Build Using Maven (skip tests — already ran)
-        run: mvn clean install -DskipTests #creates jar if all above steps are good
+        run: mvn clean install -DskipTests
+
+      # Upload JAR Artifact
+      - name: Upload JAR Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: springboot-jar
+          path: target/*.jar
 
   # ─── Job 2: Build & Push Docker Image ────────────────────────
   docker-build-push:
@@ -59,14 +70,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set Up Java
-        uses: actions/setup-java@v4
+      # Download JAR from Job 1
+      - name: Download JAR Artifact
+        uses: actions/download-artifact@v4
         with:
-          java-version: '21'
-          distribution: 'temurin'
-
-      - name: Build Jar
-        run: mvn clean package -DskipTests
+          name: springboot-jar
+          path: target
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
