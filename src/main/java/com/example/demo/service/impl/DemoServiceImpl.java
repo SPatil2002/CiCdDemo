@@ -32,8 +32,8 @@ public class DemoServiceImpl implements DemoService {
     }
 
     @Override
-    public UserDto updateUser(UserDto userDto) {
-        User user = demoRepository.findById(userDto.getStudentId()).orElseThrow(() -> new RuntimeException("User not found"));
+    public UserDto updateUser(UserDto userDto,String id) {
+        User user = demoRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());
@@ -58,4 +58,5 @@ public class DemoServiceImpl implements DemoService {
         User singleUser = demoRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         demoRepository.deleteById(id);
     }
+
 }

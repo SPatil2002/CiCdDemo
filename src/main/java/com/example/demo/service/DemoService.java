@@ -8,7 +8,7 @@ public interface DemoService {
 
     UserDto createUser(UserDto userDto);
 
-    UserDto updateUser(UserDto userDto);
+    UserDto updateUser(UserDto userDto,String id);
 
     UserDto findUserById(String id);
 

@@ -39,15 +39,15 @@ jobs:
       - name: Wait for MySQL to be Ready
         run: sleep 20                   #
 
-      - name: Run Tests
-        run: mvn test
+      - name: Run Tests with Coverage
+        run: mvn clean test jacoco:report
         env:
           SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/Demo
           SPRING_DATASOURCE_USERNAME: root
           SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
       - name: Build Using Maven (skip tests — already ran)
-        run: mvn clean install -DskipTests
+        run: mvn clean install -DskipTests #creates jar if all above steps are good
 
   # ─── Job 2: Build & Push Docker Image ────────────────────────
   docker-build-push:
